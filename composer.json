@@ -21,13 +21,13 @@
   "extra": {
     "acorn": {
       "providers": [
-        "uldin-nl\\Radicle\\Providers\\FlareServiceProvider",
-        "uldin-nl\\Radicle\\Providers\\AcfServiceProvider",
-        "uldin-nl\\Radicle\\Providers\\LoginServiceProvider"
+        "uldin\\Radicle\\Providers\\FlareServiceProvider",
+        "uldin\\Radicle\\Providers\\AcfServiceProvider",
+        "uldin\\Radicle\\Providers\\LoginServiceProvider"
       ],
       "aliases": {
-        "Flare": "uldin-nl\\Radicle\\Facades\\Flare",
-        "Acf": "uldin-nl\\Radicle\\Facades\\Acf"
+        "Flare": "uldin\\Radicle\\Facades\\Flare",
+        "Acf": "uldin\\Radicle\\Facades\\Acf"
       }
     }
   }
