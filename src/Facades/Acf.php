@@ -1,6 +1,6 @@
 <?php
 
-namespace OutlawzTeam\Radicle\Facades;
+namespace UldinNl\Radicle\Facades;
 
 use Illuminate\Support\Facades\Facade;
 

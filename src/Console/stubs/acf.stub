@@ -2,7 +2,7 @@
 
 namespace {{ namespace }};
 
-use OutlawzTeam\Radicle\Support\Acf;
+use UldinNl\Radicle\Support\Acf;
 
 class {{ class }} extends Acf
 {

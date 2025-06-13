@@ -1,6 +1,6 @@
 <?php
 
-namespace OutlawzTeam\Radicle;
+namespace UldinNl\Radicle;
 
 use Roots\Acorn\Application;
 use Spatie\FlareClient\Flare as FlareClientFlare;

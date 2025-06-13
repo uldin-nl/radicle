@@ -1,6 +1,6 @@
 <?php
 
-namespace OutlawzTeam\Radicle\Providers;
+namespace UldinNl\Radicle\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
