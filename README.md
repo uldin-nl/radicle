@@ -1,4 +1,4 @@
-# Outlawz Radicle Package
+# Radicle Package
 
 This repo can be used to scaffold an Acorn package. See the [Acorn Package Development](https://roots.io/acorn/docs/package-development/) docs for further information.
 
