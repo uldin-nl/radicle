@@ -54,7 +54,7 @@ class LoginServiceProvider extends ServiceProvider
             /* Logo */
             #login h1 a,
             .login h1 a {
-                background-image: url('https://assets.outlawz.nl/images/logo.svg');
+                background-image: url('https://uldin.nl/wp-content/uploads/2024/02/logo-met-tekst4.png');
                 height: 98px;
                 width: 114px;
                 background-size: 114px;
@@ -65,7 +65,6 @@ class LoginServiceProvider extends ServiceProvider
                 background-color: black;
                 display: grid;
                 place-content: center;
-                background-image: url('https://assets.outlawz.nl/images/logo-outline.svg');
                 background-repeat: repeat-x;
                 background-position: -52vw;
                 background-size: 104vw 100vh;
@@ -148,7 +147,7 @@ class LoginServiceProvider extends ServiceProvider
      */
     public function customLoginLogoUrl()
     {
-        return 'https://outlawz.nl'; // You can change this to any URL you want
+        return 'https://uldin.nl'; // You can change this to any URL you want
     }
 
     /**
