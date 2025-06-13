@@ -1,6 +1,6 @@
 <?php
 
-namespace UldinNl\Radicle\Support;
+namespace OutlawzTeam\Radicle\Support;
 
 abstract class Acf
 {

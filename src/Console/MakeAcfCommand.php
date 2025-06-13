@@ -1,6 +1,6 @@
 <?php
 
-namespace UldinNl\Radicle\Console;
+namespace OutlawzTeam\Radicle\Console;
 
 use Roots\Acorn\Console\Commands\GeneratorCommand;
 

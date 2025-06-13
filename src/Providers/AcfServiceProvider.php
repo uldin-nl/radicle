@@ -1,11 +1,11 @@
 <?php
 
-namespace UldinNl\Radicle\Providers;
+namespace OutlawzTeam\Radicle\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use UldinNl\Radicle\Acf;
-use UldinNl\Radicle\Console\MakeAcfCommand;
-use UldinNl\Radicle\Facades\Acf as FacadesAcf;
+use OutlawzTeam\Radicle\Acf;
+use OutlawzTeam\Radicle\Console\MakeAcfCommand;
+use OutlawzTeam\Radicle\Facades\Acf as FacadesAcf;
 
 class AcfServiceProvider extends ServiceProvider
 {

@@ -1,17 +1,17 @@
 {
-  "name": "uldin-nl/radicle",
+  "name": "outlawz-team/radicle",
   "type": "package",
-  "description": "Radicle package",
+  "description": "Outlawz Radicle package",
   "license": "MIT",
   "authors": [
     {
-      "name": "Uldin",
-      "email": "dev@uldin.nl"
+      "name": "Outlawz",
+      "email": "dev@outlawz.nl"
     }
   ],
   "autoload": {
     "psr-4": {
-      "UldinNl\\Radicle\\": "src/"
+      "OutlawzTeam\\Radicle\\": "src/"
     }
   },
   "require": {
@@ -21,13 +21,13 @@
   "extra": {
     "acorn": {
       "providers": [
-        "UldinNl\\Radicle\\Providers\\FlareServiceProvider",
-        "UldinNl\\Radicle\\Providers\\AcfServiceProvider",
-        "UldinNl\\Radicle\\Providers\\LoginServiceProvider"
+        "OutlawzTeam\\Radicle\\Providers\\FlareServiceProvider",
+        "OutlawzTeam\\Radicle\\Providers\\AcfServiceProvider",
+        "OutlawzTeam\\Radicle\\Providers\\LoginServiceProvider"
       ],
       "aliases": {
-        "Flare": "UldinNl\\Radicle\\Facades\\Flare",
-        "Acf": "UldinNl\\Radicle\\Facades\\Acf"
+        "Flare": "OutlawzTeam\\Radicle\\Facades\\Flare",
+        "Acf": "OutlawzTeam\\Radicle\\Facades\\Acf"
       }
     }
   }
