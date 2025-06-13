@@ -62,7 +62,7 @@ class LoginServiceProvider extends ServiceProvider
 
             /* Login background */
             body {
-                background-color: black;
+                background-color: white;
                 display: grid;
                 place-content: center;
                 background-repeat: repeat-x;
@@ -72,7 +72,7 @@ class LoginServiceProvider extends ServiceProvider
 
             /* Links */
             a {
-                color: #FFB800 !important;
+                color:rgb(11, 167, 178) !important;
             }
 
             /* Language switcher */
