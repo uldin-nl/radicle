@@ -107,6 +107,7 @@ class Acf
         }
 
         $this->restrictBlockTypes();
+        $this->registerLegacyContentMigration();
         $this->registerFlexibleContentSync();
         $this->registerBlockToFlexibleContentSync();
     }
@@ -298,6 +299,94 @@ class Acf
                 'post_content' => wp_slash(implode("\n\n", $blocks)),
             ]);
         }, 20);
+    }
+
+    /**
+     * Migrate legacy Flexible Content when a page first opens in Gutenberg.
+     */
+    protected function registerLegacyContentMigration(): void
+    {
+        if (!config('acf.component_blocks.auto_migrate_legacy_content', true)) {
+            return;
+        }
+
+        add_action('current_screen', function ($screen): void {
+            if (!$screen || !method_exists($screen, 'is_block_editor') || !$screen->is_block_editor()) {
+                return;
+            }
+
+            $postId = isset($_GET['post']) ? absint(wp_unslash($_GET['post'])) : 0;
+
+            if ($postId) {
+                $this->migrateLegacyPostToBlocks($postId);
+            }
+        });
+    }
+
+    /**
+     * Convert an untouched legacy component page to full ACF block data.
+     */
+    protected function migrateLegacyPostToBlocks(int $postId): bool
+    {
+        $post = get_post($postId);
+
+        if (!$post
+            || !in_array($post->post_type, config('acf.component_blocks.post_types', ['page']), true)
+            || trim((string) $post->post_content) !== '') {
+            return false;
+        }
+
+        $field = config('acf.component_blocks.flexible_content_field', 'content');
+        $rows = get_field($field, $postId, false);
+
+        if (!is_array($rows) || !$rows) {
+            return false;
+        }
+
+        $blocks = [];
+
+        foreach ($rows as $row) {
+            $layoutName = $row['acf_fc_layout'] ?? null;
+
+            if (!$layoutName) {
+                continue;
+            }
+
+            $blockName = sanitize_title(str_replace('_', '-', $layoutName));
+
+            if (!isset($this->componentLayouts[$blockName])) {
+                continue;
+            }
+
+            unset($row['acf_fc_layout']);
+            $blocks[] = serialize_block([
+                'blockName' => 'acf/'.$blockName,
+                'attrs' => [
+                    'name' => 'acf/'.$blockName,
+                    'data' => $row,
+                    'mode' => 'preview',
+                ],
+                'innerBlocks' => [],
+                'innerHTML' => '',
+                'innerContent' => [],
+            ]);
+        }
+
+        if (!$blocks) {
+            return false;
+        }
+
+        add_post_meta($postId, '_radicle_21_block_migration_backup', [
+            'created_at' => current_time('mysql'),
+            'post_content' => $post->post_content,
+        ], true);
+
+        $result = wp_update_post([
+            'ID' => $postId,
+            'post_content' => wp_slash(implode("\n\n", $blocks)),
+        ], true);
+
+        return !is_wp_error($result);
     }
 
     /**
@@ -531,10 +620,10 @@ class Acf
             ];
 
             $variables = $this->getEditorCssVariables();
+            $css = '';
 
             if ($variables) {
-                $linkColor = config('acf.component_blocks.editor_link_color');
-                $css = implode(', ', [
+                $css .= implode(', ', [
                     'html',
                     'body',
                     '.editor-styles-wrapper',
@@ -542,12 +631,28 @@ class Acf
                     '.acf-block-component',
                     '.acf-block-preview',
                 ]).' { '.implode(' ', $variables).' }';
+            }
 
-                if ($linkColor) {
-                    $css .= ' .acf-block-preview a:not([class*="text-"]) {'
-                        .' color: '.$linkColor.' !important; }';
-                }
+            $linkColor = config('acf.component_blocks.editor_link_color');
 
+            if ($linkColor) {
+                $css .= ' .acf-block-preview a:not([class*="text-"]) {'
+                    .' color: '.$linkColor.' !important; }';
+            }
+
+            if (config('acf.component_blocks.disable_editor_motion', true)) {
+                $css .= ' .acf-block-preview, .acf-block-preview * {'
+                    .' animation-delay: 0s !important; animation-duration: 0s !important;'
+                    .' transition-delay: 0s !important; transition-duration: 0s !important; }'
+                    .' .acf-block-preview .opacity-0 { opacity: 1 !important; }'
+                    .' .acf-block-preview :is(.motion-reveal, .motion-stagger__item,'
+                    .' .hero-motion__background, .hero-motion__line > span,'
+                    .' .hero-motion__copy, .hero-motion__cta, .hero-motion__trusted,'
+                    .' .motion-case-phone) { opacity: 1 !important; transform: none !important; }'
+                    .' .acf-block-preview .translate-y-6 { transform: translateY(0) !important; }';
+            }
+
+            if ($css !== '') {
                 $settings['styles'][] = [
                     'css' => $css,
                 ];

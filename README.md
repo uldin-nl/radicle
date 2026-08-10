@@ -89,9 +89,19 @@ and the Classic Editor can therefore continue reading the same component rows.
 After a Classic Editor save, Radicle also rebuilds the Gutenberg blocks from
 those Flexible Content rows so both editors reopen with the latest values.
 
+When an existing Flexible Content page with empty `post_content` is first opened
+in the Block Editor, Radicle automatically creates full ACF blocks and stores a
+rollback copy in `_radicle_21_block_migration_backup`. Disable this behavior with
+`acf.component_blocks.auto_migrate_legacy_content`.
+
 The project's `resources/css/app.css` entry point is loaded in the block editor
 by default, so component previews use the frontend utilities. This can be
 changed or disabled with `acf.component_blocks.editor_style`.
+
+Frontend reveal animations are disabled in ACF block previews by default, so
+content that starts with `opacity-0` remains visible while editing. The frontend
+animation remains unchanged. Set `acf.component_blocks.disable_editor_motion`
+to `false` when animations should also run inside the editor preview.
 
 Site colors and border radius are read from the configured ACF option fields and
 injected as CSS custom properties in the editor preview. Configure mappings with
