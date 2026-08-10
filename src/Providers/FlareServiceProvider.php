@@ -1,10 +1,10 @@
 <?php
 
-namespace OutlawzTeam\Radicle\Providers;
+namespace Uldin\Radicle\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use OutlawzTeam\Radicle\Facades\Flare as FacadesFlare;
-use OutlawzTeam\Radicle\Flare;
+use Uldin\Radicle\Facades\Flare as FacadesFlare;
+use Uldin\Radicle\Flare;
 
 class FlareServiceProvider extends ServiceProvider
 {

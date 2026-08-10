@@ -1,8 +1,9 @@
 <?php
 
-namespace OutlawzTeam\Radicle\Providers;
+namespace Uldin\Radicle\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Uldin\Radicle\Console\MigrateToUldinCommand;
 
 class LoginServiceProvider extends ServiceProvider
 {
@@ -23,17 +24,22 @@ class LoginServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                MigrateToUldinCommand::class,
+            ]);
+        }
 
         add_action('login_enqueue_scripts', [$this, 'addInlineLoginStyles']);
 
         // Change the login logo URL
         add_filter('login_headerurl', [$this, 'customLoginLogoUrl']);
 
-        // Create the Outlawz customer role
-        add_action('init', [$this, 'create_outlawz_customer_role']);
+        // Create the Uldin customer role
+        add_action('init', [$this, 'create_uldin_customer_role']);
 
-        // Disable update notices for the Outlawz klant role
-        add_action('admin_init', [$this, 'disable_update_notices_for_outlawz_klant']);
+        // Disable update notices for the Uldin customer role
+        add_action('admin_init', [$this, 'disable_update_notices_for_uldin_customer']);
     }
 
     /**
@@ -54,7 +60,7 @@ class LoginServiceProvider extends ServiceProvider
             /* Logo */
             #login h1 a,
             .login h1 a {
-                background-image: url('https://uldin.nl/wp-content/uploads/2024/02/logo-met-tekst4.png');
+                background-image: url('https://uldin.nl/content/uploads/2026/08/uldin.svg');
                 height: 98px;
                 width: 114px;
                 background-size: 114px;
@@ -62,6 +68,8 @@ class LoginServiceProvider extends ServiceProvider
 
             /* Login background */
             body {
+                --uldin-orange: #FE6503;
+                --uldin-orange-gradient: linear-gradient(155deg, #FE5303 0%, #FE5703 21%, #FE6503 44%, #FE7C04 69%, #FE9B04 94%, #FEA405 100%);
                 background-color: white;
                 display: grid;
                 place-content: center;
@@ -72,7 +80,7 @@ class LoginServiceProvider extends ServiceProvider
 
             /* Links */
             a {
-                color:rgb(11, 167, 178) !important;
+                color: var(--uldin-orange) !important;
             }
 
             /* Language switcher */
@@ -82,8 +90,8 @@ class LoginServiceProvider extends ServiceProvider
 
             /* Submit button */
             .login #wp-submit {
-                background-color: #FFB800;
-                border-color: #FFB800;
+                background: var(--uldin-orange-gradient);
+                border-color: var(--uldin-orange);
                 box-shadow: none;
                 text-shadow: none;
                 color: white;
@@ -93,12 +101,12 @@ class LoginServiceProvider extends ServiceProvider
 
             /* Input fields */
             input[type='text']:focus, input[type='password']:focus, input[type='color']:focus, input[type='date']:focus, input[type='datetime']:focus, input[type='datetime-local']:focus, input[type='email']:focus, input[type='month']:focus, input[type='number']:focus, input[type='search']:focus, input[type='tel']:focus, input[type='time']:focus, input[type='url']:focus, input[type='week']:focus, input[type='checkbox']:focus, input[type='radio']:focus, select:focus, textarea:focus{
-                border-color: #FFB800;
+                border-color: var(--uldin-orange);
                 box-shadow: none;
             }
 
             input[type='text'], input[type='password'], input[type='color'], input[type='date'], input[type='datetime'], input[type='datetime-local'], input[type='email'], input[type='month'], input[type='number'], input[type='search'], input[type='tel'], input[type='time'], input[type='url'], input[type='week'], input[type='checkbox'], input[type='radio'], select, textarea{
-                border-color: #FFB800;
+                border-color: var(--uldin-orange);
                 box-shadow: none;
                 border-radius: 0;
             }
@@ -108,14 +116,14 @@ class LoginServiceProvider extends ServiceProvider
             }
 
             input[type='checkbox']:checked::before {
-                content: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M14.83%204.89l1.34.94-5.81%208.38H9.02L5.78%209.67l1.34-1.25%202.57%202.4z%27%20fill%3D%27%23FFB800%27%2F%3E%3C%2Fsvg%3E);
+                content: url(data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2020%2020%27%3E%3Cpath%20d%3D%27M14.83%204.89l1.34.94-5.81%208.38H9.02L5.78%209.67l1.34-1.25%202.57%202.4z%27%20fill%3D%27%23FE6503%27%2F%3E%3C%2Fsvg%3E);
             }
 
             /* Show hide Password icon*/
             .login .button.wp-hide-pw:focus {
                 background: transparent;
-                border-color: #FFB800;
-                box-shadow: 0 0 0 1px #FFB800;
+                border-color: var(--uldin-orange);
+                box-shadow: 0 0 0 1px var(--uldin-orange);
                 outline: 2px solid transparent;
             }
                 
@@ -151,11 +159,11 @@ class LoginServiceProvider extends ServiceProvider
     }
 
     /**
-     * Create the Outlawz klant role.
+     * Create the Uldin customer role.
      * 
      * @return void
      */
-    public function create_outlawz_customer_role()
+    public function create_uldin_customer_role()
     {
         $admin_role = get_role('administrator');
 
@@ -165,7 +173,7 @@ class LoginServiceProvider extends ServiceProvider
 
         $admin_capabilities = $admin_role->capabilities;
 
-        // Remove capabilities that are not needed for the Outlawz klant role
+        // Remove capabilities that are not needed for the Uldin customer role
         $admin_capabilities['update_core'] = false;
 
         // Plugins
@@ -185,17 +193,28 @@ class LoginServiceProvider extends ServiceProvider
         $admin_capabilities['promote_users'] = false;
 
         // Add the modified role
-        add_role('outlawz_klant', 'Outlawz klant', $admin_capabilities);
+        add_role('uldin_klant', 'Uldin klant', $admin_capabilities);
     }
 
     /**
-     * Disable update notices for Outlawz klant role.
+     * Backwards-compatible callback for integrations using the former method name.
+     *
+     * @deprecated Use create_uldin_customer_role().
+     * @return void
+     */
+    public function create_outlawz_customer_role()
+    {
+        $this->create_uldin_customer_role();
+    }
+
+    /**
+     * Disable update notices for Uldin and legacy customer roles.
      *
      * @return void
      */
-    public function disable_update_notices_for_outlawz_klant()
+    public function disable_update_notices_for_uldin_customer()
     {
-        if ($this->user_has_role('outlawz_klant')) {
+        if ($this->user_has_role('uldin_klant') || $this->user_has_role('outlawz_klant')) {
             // Hide update notices
             add_action('admin_head', function () {
                 remove_action('admin_notices', 'update_nag', 3);
@@ -208,6 +227,17 @@ class LoginServiceProvider extends ServiceProvider
             add_filter('pre_site_transient_update_themes', '__return_null');
             add_action('wp_before_admin_bar_render', [$this, 'remove_wp_logo_menu']);
         }
+    }
+
+    /**
+     * Backwards-compatible callback for integrations using the former method name.
+     *
+     * @deprecated Use disable_update_notices_for_uldin_customer().
+     * @return void
+     */
+    public function disable_update_notices_for_outlawz_klant()
+    {
+        $this->disable_update_notices_for_uldin_customer();
     }
 
     /**
