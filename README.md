@@ -97,6 +97,8 @@ Site colors and border radius are read from the configured ACF option fields and
 injected as CSS custom properties in the editor preview. Configure mappings with
 `acf.component_blocks.editor_css_variables`. Plain preview links use the primary
 color by default; configure this with `acf.component_blocks.editor_link_color`.
+When a mapped option field does not exist, Radicle injects no value for it and
+the project's existing Tailwind theme remains in control.
 
 The block inserter is restricted to application ACF components by default. Add
 intentional exceptions through `acf.component_blocks.additional_allowed_blocks`,

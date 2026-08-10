@@ -570,7 +570,12 @@ class Acf
                 continue;
             }
 
-            $value = function_exists('get_field') ? get_field($settings['field'], 'option') : null;
+            if (!function_exists('get_field_object')
+                || !get_field_object($settings['field'], 'option', false)) {
+                continue;
+            }
+
+            $value = get_field($settings['field'], 'option');
             $value = $value !== null && $value !== '' ? $value : ($settings['fallback'] ?? '');
 
             if (($settings['type'] ?? 'color') === 'number') {
