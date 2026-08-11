@@ -5,6 +5,7 @@ namespace Uldin\Radicle\Providers;
 use Illuminate\Support\ServiceProvider;
 use Uldin\Radicle\Acf;
 use Uldin\Radicle\Console\MakeAcfCommand;
+use Uldin\Radicle\Console\InstallCommand;
 use Uldin\Radicle\Facades\Acf as FacadesAcf;
 
 class AcfServiceProvider extends ServiceProvider
@@ -37,10 +38,14 @@ class AcfServiceProvider extends ServiceProvider
             __DIR__.'/../../config/acf.php' => $this->app->configPath('acf.php'),
         ], 'acf');
 
-        if(function_exists('acf_add_local_field_group')){
-            $this->commands([
-                MakeAcfCommand::class,
-            ]);
+        if ($this->app->runningInConsole()) {
+            $commands = [InstallCommand::class];
+
+            if (function_exists('acf_add_local_field_group')) {
+                $commands[] = MakeAcfCommand::class;
+            }
+
+            $this->commands($commands);
         }
 
         $this->app->make('Acf');

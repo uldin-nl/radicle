@@ -1,0 +1,43 @@
+
+@import "tailwindcss";
+@import './space.css';
+@import './wysiwyg.css';
+@source "../views/";
+@source "../../app/";
+
+body,
+html {
+  @apply !m-0 !p-0 !antialiased;
+}
+
+[x-cloak] {
+  display: none !important;
+}
+
+@theme static {
+
+  --color-purple: #4a2c5e;
+  --color-pink: #ff4d7d;
+  --color-yellow: #f9c74f;
+  --color-green: #00a096;
+  --color-blue: #0073aa;
+  --color-red: #dc3232;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --text-20-20-700: 20px;
+  --text-20-20-700--line-height: 20px;
+  --text-20-20-700--font-weight: 500;
+
+  --text-22-22-700: 22px;
+  --text-22-22-700--line-height: 22px;
+  --text-22-22-700--font-weight: 700;
+
+  --text-60-65-700: 60px;
+  --text-60-65-700--line-height: 65px;
+  --text-60-65-700--font-weight: 700;
+
+  --text-30-30-600: 30px;
+  --text-30-30-600--line-height: 30px;
+  --text-30-30-600--font-weight: 600;
+}

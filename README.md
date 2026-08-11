@@ -10,6 +10,20 @@ You can install this package with Composer:
 composer require uldin/radicle
 ```
 
+Install the complete project blueprint (ACF site settings, home template, Space
+component, styles and application layout) with:
+
+```shell
+wp acorn radicle:install
+```
+
+The command is idempotent and skips existing files whose contents differ. After
+reviewing those conflicts, overwrite them explicitly with:
+
+```shell
+wp acorn radicle:install --force
+```
+
 ## Migrating existing installations
 
 After updating an existing installation, migrate users from the legacy customer

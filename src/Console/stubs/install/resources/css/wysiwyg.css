@@ -1,0 +1,39 @@
+@layer components {
+  .wysiwyg {
+    @apply max-w-none;
+  }
+
+  .wysiwyg h1,
+  .wysiwyg h2,
+  .wysiwyg h3,
+  .wysiwyg h4,
+  .wysiwyg h5,
+  .wysiwyg h6 {
+    @apply font-bold;
+  }
+
+  .wysiwyg a {
+    @apply underline underline-offset-4 decoration-current/80 hover:decoration-current;
+  }
+
+  .wysiwyg ul,
+  .wysiwyg ol {
+    @apply pl-6 list-disc;
+  }
+
+  .wysiwyg ol {
+    @apply list-decimal;
+  }
+
+  .wysiwyg p + p {
+    @apply mt-4;
+  }
+
+  .wysiwyg li::marker {
+    @apply text-current/60;
+  }
+
+  .wysiwyg strong {
+    @apply font-semibold;
+  }
+}
