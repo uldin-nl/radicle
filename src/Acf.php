@@ -730,7 +730,15 @@ class Acf
             return;
         }
 
-        add_filter('allowed_block_types_all', function ($allowedBlockTypes, $editorContext): array {
+        $postTypes = config('acf.component_blocks.post_types', ['page']);
+
+        add_filter('allowed_block_types_all', function ($allowedBlockTypes, $editorContext) use ($postTypes) {
+            $postType = $editorContext->post->post_type ?? null;
+
+            if (!$postType || !in_array($postType, $postTypes, true)) {
+                return $allowedBlockTypes;
+            }
+
             $allowed = array_map(
                 fn (string $name): string => 'acf/'.$name,
                 array_keys($this->componentLayouts)

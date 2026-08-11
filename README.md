@@ -110,6 +110,8 @@ color by default; configure this with `acf.component_blocks.editor_link_color`.
 When a mapped option field does not exist, Radicle injects no value for it and
 the project's existing Tailwind theme remains in control.
 
-The block inserter is restricted to application ACF components by default. Add
+The block inserter is restricted to application ACF components by default on
+the post types configured in `acf.component_blocks.post_types`. Editors for
+other post types, such as JetFormBuilder forms, remain unrestricted. Add
 intentional exceptions through `acf.component_blocks.additional_allowed_blocks`,
 or disable the restriction with `acf.component_blocks.restrict_block_types`.
